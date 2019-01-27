@@ -1,11 +1,17 @@
 //1.
+/**
+ * 
+ * @param target 
+ * @param method 
+ * @param descriptor 
+ * декоратор метода, который добавляет поле date и поле info в обьект
+ */
 function addItemInfoDecorator(target: Object, method: string, descriptor: PropertyDescriptor) {
 	let originalFunc = descriptor.value;
 
-	// public info: String;
 	descriptor.value = function () {
 		let origResult = originalFunc.apply(this);
-		origResult.date = '20/01/19';
+		origResult.date = new Date();
 		origResult.info = origResult.name + ' - $' + origResult.price;
 		return origResult;
 	}
@@ -19,7 +25,9 @@ class Item {
 		this.name = name;
 		this.price = price;
 	}
-
+	/**
+	 * метод класса, который возвращает информацию о товаре
+	 */
 	@addItemInfoDecorator
 	public getItemInfo() {
 		return {
@@ -34,12 +42,18 @@ console.log(item.getItemInfo());
 
 
 //2.
-function addParams(createDate: string, type: string) {
+/**
+ * 
+ * @param createDate 
+ * @param type 
+ * декоратор класса, который добавляет поле createDate и поле type в обьект
+ */
+function addParams(createDate: Date, type: string) {
 	return function (targetClass) {
 		return class {
 			public name: string;
 			public age: number;
-			public createDate: string;
+			public createDate: Date;
 			public type: string;
 
 			constructor(name: string, age: number) {
@@ -52,7 +66,7 @@ function addParams(createDate: string, type: string) {
 	}
 }
 
-@addParams('20/01/19', 'admin')
+@addParams(new Date(), 'admin')
 class User {
 	public name: string;
 	public age: number;
@@ -112,7 +126,9 @@ class Middle {
 		console.log('Creating!!!');
 	}
 }
-
+/**
+ * класс Senior включает в себя классы Junior и Middle, а также добавляет метод createArchitecture
+ */
 class Senior implements Junior, Middle {
 	doTasks(): void { };
 	createApp(): void { };

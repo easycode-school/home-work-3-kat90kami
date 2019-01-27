@@ -8,12 +8,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 //1.
+/**
+ *
+ * @param target
+ * @param method
+ * @param descriptor
+ * декоратор метода, который добавляет поле date и поле info в обьект
+ */
 function addItemInfoDecorator(target, method, descriptor) {
     let originalFunc = descriptor.value;
-    // public info: String;
     descriptor.value = function () {
         let origResult = originalFunc.apply(this);
-        origResult.date = '20/01/19';
+        origResult.date = new Date();
         origResult.info = origResult.name + ' - $' + origResult.price;
         return origResult;
     };
@@ -23,6 +29,9 @@ class Item {
         this.name = name;
         this.price = price;
     }
+    /**
+     * метод класса, который возвращает информацию о товаре
+     */
     getItemInfo() {
         return {
             name: this.name,
@@ -39,6 +48,12 @@ __decorate([
 let item = new Item('Apple', 100);
 console.log(item.getItemInfo());
 //2.
+/**
+ *
+ * @param createDate
+ * @param type
+ * декоратор класса, который добавляет поле createDate и поле type в обьект
+ */
 function addParams(createDate, type) {
     return function (targetClass) {
         return class {
@@ -58,7 +73,7 @@ let User = class User {
     }
 };
 User = __decorate([
-    addParams('20/01/19', 'admin'),
+    addParams(new Date(), 'admin'),
     __metadata("design:paramtypes", [String, Number])
 ], User);
 let res = new User('vasya', 69);
@@ -98,6 +113,9 @@ class Middle {
         console.log('Creating!!!');
     }
 }
+/**
+ * класс Senior включает в себя классы Junior и Middle, а также добавляет метод createArchitecture
+ */
 class Senior {
     doTasks() { }
     ;
